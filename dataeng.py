@@ -96,14 +96,14 @@ class DataEng:
         sentence_complexity = self.sentence_complexity()
 
         output = [[num_of_words, stopwords_freq, av_word_per_sen, punctuations, ARI,
-                    freq_of_verb, freq_of_adj, freq_of_adv, freq_of_distinct_adj, freq_of_distinct_adv,
-                    sentence_complexity, freq_of_wrong_words, sentiment_compound, sentiment_positive,
-                    sentiment_negative, num_of_grammar_errors,
-                    num_of_short_forms, Incorrect_form_ratio, flesch_reading_ease, flesch_kincaid_grade,
-                    dale_chall_readability_score, text_standard, mcalpine_eflaw, number_of_diff_words,
-                    freq_diff_words, ttr, coherence_score,
-                    lexrank_avg_min_diff, lexrank_interquartile, freq_of_noun, freq_of_transition, freq_of_pronoun,
-                    noun_to_adj, verb_to_adv, phrase_diversity]]
+                   freq_of_verb, freq_of_adj, freq_of_adv, freq_of_distinct_adj, freq_of_distinct_adv,
+                   sentence_complexity, freq_of_wrong_words, sentiment_compound, sentiment_positive,
+                   sentiment_negative, num_of_grammar_errors,
+                   num_of_short_forms, Incorrect_form_ratio, flesch_reading_ease, flesch_kincaid_grade,
+                   dale_chall_readability_score, text_standard, mcalpine_eflaw, number_of_diff_words,
+                   freq_diff_words, ttr, coherence_score,
+                   lexrank_avg_min_diff, lexrank_interquartile, freq_of_noun, freq_of_transition, freq_of_pronoun,
+                   noun_to_adj, verb_to_adv, phrase_diversity]]
 
         return pd.DataFrame(output)
 
@@ -195,7 +195,7 @@ class DataEng:
         lxr = LexRank(self.documents, stopwords=STOPWORDS['en'])
         ranks = lxr.rank_sentences(self.sent, threshold=None)
 
-        return sum(ranks)/len(ranks)-min(ranks), np.quantile(ranks)[25, 75][1] - np.quantile(ranks)[25, 75][0]
+        return sum(ranks)/len(ranks)-min(ranks), np.quantile(ranks,[0.25,0.75])[1] - np.quantile(ranks,[0.25,0.75])[1]
 
     def sentence_complexity(self):
         sentences = self.sent
@@ -252,12 +252,12 @@ class DataEng:
 
         # Build LDA model
         lda_model = gensim.models.LdaMulticore(corpus=corpus,
-                                                id2word=id2word,
-                                                num_topics=5,
-                                                random_state=100,
-                                                chunksize=100,
-                                                passes=10,
-                                                per_word_topics=True)
+                                               id2word=id2word,
+                                               num_topics=5,
+                                               random_state=100,
+                                               chunksize=100,
+                                               passes=10,
+                                               per_word_topics=True)
 
         # Compute coherence score
         coherence_model_lda = CoherenceModel(
@@ -335,10 +335,11 @@ class DataEng:
         ]
 
 
-# Used for testing
-input = "I think that students would benefit from learning at home,because they wont have to change and get up early in the morning to shower and do there hair. taking only classes helps them because at there house they'll be pay more attention. they will be comfortable at home.The hardest part of school is getting ready. you wake up go brush your teeth and go to your closet and look at your cloths. after you think you picked a outfit u go look in the mirror and youll either not like it or you look and see a stain. Then you'll have to change. with the online classes you can wear anything and stay home and you wont need to stress about what to wear.most students usually take showers before school. they either take it before they sleep or when they wake up. some students do both to smell good. that causes them do miss the bus and effects on there lesson time cause they come late to school. when u have online classes u wont need to miss lessons cause you can get everything set up and go take a shower and when u get out your ready to go.when your home your comfortable and you pay attention. it gives then an advantage to be smarter and even pass there classmates on class work. public schools are difficult even if you try. some teacher dont know how to teach it in then way that students understand it. that causes students to fail and they may repeat the class."
-data = DataEng(input).Engineering()
-print(data)
+if __name__ == "__main__":
+    # Used for testing
+    input = "I think that students would benefit from learning at home,because they wont have to change and get up early in the morning to shower and do there hair. taking only classes helps them because at there house they'll be pay more attention. they will be comfortable at home.The hardest part of school is getting ready. you wake up go brush your teeth and go to your closet and look at your cloths. after you think you picked a outfit u go look in the mirror and youll either not like it or you look and see a stain. Then you'll have to change. with the online classes you can wear anything and stay home and you wont need to stress about what to wear.most students usually take showers before school. they either take it before they sleep or when they wake up. some students do both to smell good. that causes them do miss the bus and effects on there lesson time cause they come late to school. when u have online classes u wont need to miss lessons cause you can get everything set up and go take a shower and when u get out your ready to go.when your home your comfortable and you pay attention. it gives then an advantage to be smarter and even pass there classmates on class work. public schools are difficult even if you try. some teacher dont know how to teach it in then way that students understand it. that causes students to fail and they may repeat the class."
+    data = DataEng(input).Engineering()
+    print(data)
 # print(len(nltk.sent_tokenize(input)))
 
 # split() -> punctuation with word
