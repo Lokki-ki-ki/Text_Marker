@@ -23,7 +23,7 @@ def result(predictions):
 
 
 def main():
-    model = pickle.load(open('Decision_Tree_vocab.sav', "rb"))
+    model = pickle.load(open('Models_sav\Decision_Tree_vocab.sav', "rb"))
     reply = True
     greeting()
     while reply:

@@ -70,7 +70,7 @@ class DataEng:
         corrected_text = self.fixgrammar()
         num_of_short_forms = self.shortforms(corrected_text)
         Incorrect_form_ratio = (
-            num_of_grammar_errors + num_of_short_forms) / num_of_short_forms
+            num_of_grammar_errors + num_of_short_forms) / num_of_words
 
         # Readability
         flesch_reading_ease = textstat.flesch_reading_ease(
